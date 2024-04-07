@@ -1,0 +1,21 @@
+{
+  "name": "test1-mean",
+  "version": "1.0.0",
+  "description": "Comparison Platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "MEAN",
+    "Mongo",
+    "Express",
+    "Angular",
+    "Nodejs"
+  ],
+  "author": "Atharva",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
