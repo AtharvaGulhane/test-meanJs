@@ -1,9 +1,17 @@
-var mongoose = require('mongoose');
+// app/models/student.js
 
-// define our students model
-// module.exports allows us to pass this to other files when it is called
-module.exports = mongoose.model('Student', {
-   name : {type : String, default: ''},
-   place: {type : String, default: ''},
-   country : {type : String, default: ''}
+// Import necessary modules
+const mongoose = require('mongoose');
+
+// Define student schema
+const studentSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    place: { type: String, default: '' },
+    country: { type: String, default: '' }
 });
+
+// Create Student model
+const Student = mongoose.model('Student', studentSchema);
+
+// Export the model
+module.exports = Student;

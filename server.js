@@ -1,102 +1,33 @@
-// modules =================================================
+// Import necessary modules
 const express = require('express');
-const app = express();
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const dbConfig = require('./config/db');
 const bodyParser = require('body-parser');
-// set our port
-const port = 3000;
-// configuration ===========================================
 
-// config files
-var db = require('./config/db');
-console.log("connecting--",db);
-mongoose.connect(db.url); //Mongoose connection created
+// Connect to MongoDB using the configuration
+mongoose.connect(dbConfig.url);
+console.log("connecting--",dbConfig.url);
 
-// frontend routes =========================================================
-app.get('/', (req, res) => res.send('Welcome to Tutorialspoint!'));
+// Create Express app
+const app = express();
 
-// Parse JSON bodies
+// Middleware to parse JSON bodies
 app.use(express.json());
 
-//defining route
-app.get('/tproute', function (req, res) {
-   res.send('This is routing for the application developed using Node and Express...');
-});
+// Import routes for teachers and students
+const teacherRoutes = require('./routes/teacherRoute');
+const studentRoutes = require('./routes/studentRoute');
 
-var Student = require('./app/models/student');
-app.get('/api/students', async function(req, res) {
-   try {
-      // use mongoose to get all students in the database
-      const students = await Student.find();
-      console.log(students.length,students);
-      res.json(students); // return all students in JSON format
-   } catch (error) {
-      // if there is an error retrieving, send the error.
-      res.status(500).send(error);
-   }
-});
+// Use routes for teachers and students
+app.use(teacherRoutes);
+app.use(studentRoutes);
 
-// Now your route for creating a student
-app.post('/api/students/send', async function (req, res) {
-    try {
-        var student = new Student({
-            name: req.body.name,
-            place: req.body.place,
-            country: req.body.country
-        });
-        await student.save();
-        res.json({ message: 'student created!' });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+// Define port
+const port = process.env.PORT || 3000;
 
-app.delete('/api/students/:student_id', async function (req, res) {
-    try {
-       await Student.deleteOne({ _id: req.params.student_id });
-       res.json({ message: 'Successfully deleted' });
-    } catch (error) {
-       res.status(500).send(error);
-    }
- });
- 
+// frontend routes =========================================================
+app.get('/', (req, res) => res.send('TEST'));
 
- app.put('/api/students/:student_id', async function (req, res) {
-   try {
-      const { name, place, country } = req.body;
-      
-      const updatedStudent = await Student.findOneAndUpdate(
-         { _id: req.params.student_id },
-         { $set: { name, place, country }, $inc: { __v: 1 }},
-         { new: true, runValidators: true }
-      );
-      
-      if (!updatedStudent) {
-         return res.status(404).json({ message: 'Student not found' });
-      }
-      
-      res.json({ message: 'Successfully updated', updatedStudent });
-   } catch (error) {
-      res.status(500).send(error);
-   }
-});
-
-app.get('/api/students/search/:substring', async function(req, res) {
-   try {
-      const substring = req.params.substring;
-      
-      // Construct a regular expression pattern to search for substring
-      const regex = new RegExp(substring, 'i'); // 'i' flag for case-insensitive search
-      
-      // Find documents where the 'name' field contains the substring
-      const students = await Student.find({ name: { $regex: regex } });
-      
-      res.json(students);
-   } catch (error) {
-      res.status(500).send(error);
-   }
-});
-
-
+// Start the server
 // startup our app at http://localhost:3000
-app.listen(port, ()=> console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Server is running on port ${port}`));
