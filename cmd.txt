@@ -3,6 +3,8 @@ use package.json as refernce in the folder
 npm install -g express --save
 npm install -g nodemon --save
 npm install -g mongoose --save
+npm install multer --save
+npm install body-parser --save
 
 run  -=> nodemon server.js
 
