@@ -81,6 +81,22 @@ app.delete('/api/students/:student_id', async function (req, res) {
    }
 });
 
+app.get('/api/students/search/:substring', async function(req, res) {
+   try {
+      const substring = req.params.substring;
+      
+      // Construct a regular expression pattern to search for substring
+      const regex = new RegExp(substring, 'i'); // 'i' flag for case-insensitive search
+      
+      // Find documents where the 'name' field contains the substring
+      const students = await Student.find({ name: { $regex: regex } });
+      
+      res.json(students);
+   } catch (error) {
+      res.status(500).send(error);
+   }
+});
+
 
 // startup our app at http://localhost:3000
 app.listen(port, ()=> console.log(`Example app listening on port ${port}!`));
