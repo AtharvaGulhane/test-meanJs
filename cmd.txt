@@ -5,3 +5,23 @@ npm install -g nodemon --save
 npm install -g mongoose --save
 
 run  -=> nodemon server.js
+
+Folder Structure
+
+project_root/
+│
+├── app/
+│   ├── models/
+│   │   ├── student.js
+│   │   └── teacher.js
+│   └── ...
+│
+├── config/
+│   └── db.js
+│
+├── routes/
+│   ├── studentRoutes.js
+│   └── teacherRoutes.js
+│
+├── server.js
+└── package.json
