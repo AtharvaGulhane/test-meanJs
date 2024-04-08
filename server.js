@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dbConfig = require('./config/db');
 const bodyParser = require('body-parser');
-
 // Connect to MongoDB using the configuration
 mongoose.connect(dbConfig.url);
 console.log("connecting--",dbConfig.url);
@@ -12,7 +11,7 @@ console.log("connecting--",dbConfig.url);
 const app = express();
 
 // Middleware to parse JSON bodies
-app.use(express.json());
+app.use(express.json()); // or app.use(bodyParser.json());
 
 // Import routes for teachers and students
 const teacherRoutes = require('./routes/teacherRoute');
